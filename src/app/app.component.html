@@ -1,0 +1,8 @@
+<div>
+
+	<div cdkDropListGroup class="container">
+		<div cdkDropList [cdkDropListData]="taskTrack" (cdkDropListDropped)="drop($event, '')" *ngFor="let taskTrack of taskTracks" class="flex-item">
+			<app-task-track *ngFor="let task of (taskTrack.taskList | toArray)" [taskList]="task">
+			</app-task-track>
+		</div>
+	</div>
