@@ -1,5 +1,3 @@
-<ul *ngFor="let task of taskList" style="list-style-type: none">
-	<li>
-		<app-task-item [task]="task"></app-task-item>
-	</li>
-</ul>
+<div *ngFor="let task of taskList; let first=first; let last=last; trackBy: taskId">
+	<app-task-item [task]="task" [first]="first" [last]="last"></app-task-item>
+</div>

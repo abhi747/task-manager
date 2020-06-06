@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector: 'app-task-track',
 	templateUrl: './task-track.component.html',
-	styleUrls: ['./task-track.component.scss']
+	styleUrls: ['./task-track.component.scss'],
 })
 export class TaskTrackComponent implements OnInit {
 	@Input() taskList;
@@ -11,6 +11,10 @@ export class TaskTrackComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit(): void {
+	}
+
+	taskId(task) {
+		return task.Id;
 	}
 
 

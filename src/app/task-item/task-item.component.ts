@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { TasksService } from './../shared/tasks.service';
 
 @Component({
 	selector: 'app-task-item',
@@ -7,9 +8,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TaskItemComponent implements OnInit {
 	@Input() task;
-	constructor() { }
+	@Input() first;
+	@Input() last;
+	constructor(
+		private _taskService: TasksService
+	) { }
 
 	ngOnInit(): void {
 	}
 
+	removeTask(task) {
+		this._taskService.removeTask(task);
+	}
 }
