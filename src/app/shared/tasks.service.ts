@@ -4,13 +4,15 @@ import { ReplaySubject } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { taskTracks } from './../mock-data/task-data';
+import { TaskTrack } from './../tasks-dashboard/models/taskTrack';
+import { Task } from './../task-item/models/task-item';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class TasksService {
 
-	private taskTracks;
+	private taskTracks: TaskTrack[];
 
 	private taskTracksSource$ = new ReplaySubject();
 	taskList$ = this.taskTracksSource$.asObservable();
@@ -21,31 +23,31 @@ export class TasksService {
 		this.taskTracks = taskTracks;
 	}
 
-	getTracksData() {
+	getTracksData(): TaskTrack[] {
 		if (this.isDataPresentInStorage())
 			return this.getDataFromStorage();
 		return this.taskTracks;
 	}
 
-	getDataFromStorage() {
+	getDataFromStorage(): TaskTrack[] {
 		return this._sessionStorageService.retrieve('taskTracks');
 	}
 
-	isDataPresentInStorage() {
+	isDataPresentInStorage(): boolean {
 		return this._sessionStorageService.retrieve('taskTracks') !== null;
 	}
 
-	addTaskStorage(taskTracks) {
+	addTaskStorage(taskTracks: TaskTrack[]): void {
 		this._sessionStorageService.store('taskTracks', taskTracks);
 	}
 
-	addTask(task) {
+	addTask(task: Task): TaskTrack[] {
 		this.taskTracks = this.getTracksData();
 		this.taskTracks[0].taskList.push({ ...task, Id: uuidv4() });
 		return this.taskTracks;
 	}
 
-	removeTask(taskToBeRemoved) {
+	removeTask(taskToBeRemoved: Task): void {
 		const trackIndex = this.taskTracks.findIndex(track => {
 			return track.status === taskToBeRemoved.status;
 		});
@@ -56,7 +58,7 @@ export class TasksService {
 		this.addTaskStorage(this.taskTracks);
 	}
 
-	updateTaskStatus(taskId, status) {
+	updateTaskStatus(taskId: Task['Id'], status: string): void {
 		const trackIndex = this.taskTracks.findIndex(track => {
 			return track.status === status;
 		});

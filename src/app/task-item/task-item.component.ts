@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { TasksService } from './../shared/tasks.service';
+import { Task } from './models/task-item';
 
 @Component({
 	selector: 'app-task-item',
@@ -7,9 +8,8 @@ import { TasksService } from './../shared/tasks.service';
 	styleUrls: ['./task-item.component.scss']
 })
 export class TaskItemComponent implements OnInit {
-	@Input() task;
-	@Input() first;
-	@Input() last;
+	@Input() task: Task;
+	@Input() last: Task;
 	constructor(
 		private _taskService: TasksService
 	) { }
@@ -17,7 +17,7 @@ export class TaskItemComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	removeTask(task) {
+	removeTask(task): void {
 		this._taskService.removeTask(task);
 	}
 }

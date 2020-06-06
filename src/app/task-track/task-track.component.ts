@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { TaskList } from './models/task-track';
 
 @Component({
 	selector: 'app-task-track',
@@ -6,14 +7,14 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 	styleUrls: ['./task-track.component.scss'],
 })
 export class TaskTrackComponent implements OnInit {
-	@Input() taskList;
+	@Input() taskList: TaskList;
 
 	constructor() { }
 
 	ngOnInit(): void {
 	}
 
-	taskId(task) {
+	taskId(task): TaskList['Id'] {
 		return task.Id;
 	}
 

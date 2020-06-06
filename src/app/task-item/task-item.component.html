@@ -1,12 +1,14 @@
-<div class="card mt-2 position-relative" cdkDrag [ngClass]="{ 'mb-3': !last}">
+<div class="card mt-2 border-radius-1 position-relative" cdkDrag [ngClass]="{ 'mb-3': !last}">
 	<span class="text-secondary close-btn" (click)="removeTask(task)">&#10005;</span>
 	<div class="card-body">
 		<div class="font-weight-bold">{{task.title}}</div>
 		<div>{{task.description}}</div>
 		<div>
-			<span class="float-right text-secondary small">
+			<span class="float-right">
 				<ng-container *ngFor="let user of task.users; let last=last;">
-					{{user}} <span *ngIf="!last">,&nbsp;</span>
+					<span class="mr-2 badge badge-pill badge-light">
+						{{user}}
+					</span>
 				</ng-container>
 			</span>
 		</div>

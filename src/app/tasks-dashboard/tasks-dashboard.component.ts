@@ -1,23 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { TasksService } from './../shared/tasks.service';
 import { users } from './../mock-data/user-data';
+import { TaskTrack } from './models/taskTrack';
 
-interface TaskTrack {
-	title: string;
-	Id: number;
-	taskList: TaskList[];
-}
 
-interface TaskList {
-	title: string;
-	Id: number;
-	description: string;
-	user: string[]
-}
 @Component({
 	selector: 'app-tasks-dashboard',
 	templateUrl: './tasks-dashboard.component.html',
@@ -28,6 +18,7 @@ export class TasksDashboardComponent implements OnInit {
 	users: string[] = users;
 	taskForm: FormGroup;
 	modalRef: NgbModalRef;
+	selectedFile: any;
 
 	constructor(
 		private _fb: FormBuilder,
@@ -39,21 +30,22 @@ export class TasksDashboardComponent implements OnInit {
 		this.taskTracks = this._tasksService.getTracksData();
 	}
 
-	initTaskForm() {
+	initTaskForm(): void {
 		this.taskForm = this._fb.group({
 			title: ['', Validators.required],
 			description: ['', Validators.required],
+			file: [],
 			users: [[], Validators.required],
 			status: ["todo"]
 		})
 	}
 
-	openAddTaskModal(content) {
+	openAddTaskModal(content: TemplateRef<any>): void {
 		this.initTaskForm();
 		this.modalRef = this._modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
 	}
 
-	addTask() {
+	addTask(): void {
 		console.log(this.taskForm.value);
 		this.taskTracks = this._tasksService.addTask(
 			this.taskForm.value
@@ -61,11 +53,34 @@ export class TasksDashboardComponent implements OnInit {
 		this.modalRef.close();
 	}
 
-	trackID(track) {
+	readFileAsync(file): Promise<ArrayBuffer | string> {
+		return new Promise((resolve, reject) => {
+			let reader = new FileReader();
+
+			reader.onload = () => {
+				resolve(reader.result);
+			};
+			reader.onerror = reject;
+
+			reader.readAsArrayBuffer(file);
+		})
+	}
+
+	async onFileChange(event: Event): Promise<any> {
+		try {
+			const file = (<HTMLInputElement>event.target).files[0];
+			const contentBuffer = await this.readFileAsync(file);
+			console.log(contentBuffer)
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	trackID(track: TaskTrack): TaskTrack['Id'] {
 		return track.Id;
 	}
 
-	drop(event: CdkDragDrop<any[]>, trackStatus: string) {
+	drop(event: CdkDragDrop<any[]>, trackStatus: string): void {
 		const taskDropped = event.previousContainer.data[event.previousIndex];
 		if (event.previousContainer === event.container) {
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

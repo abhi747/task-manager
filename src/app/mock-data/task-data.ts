@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
+import { TaskTrack } from './../tasks-dashboard/models/taskTrack';
 
-export const taskTracks = [{
+export const taskTracks: TaskTrack[] = [{
 	title: "To Do",
 	status: "todo",
 	Id: uuidv4(),
@@ -26,7 +27,7 @@ export const taskTracks = [{
 		Id: uuidv4(),
 		status: "inprogress",
 		description: "Final editions for the projects",
-		users: ["Will"]
+		users: ["Edward"]
 	}]
 }, {
 	title: "In Review",
@@ -37,7 +38,7 @@ export const taskTracks = [{
 		Id: uuidv4(),
 		status: "review",
 		description: "UI kit creations from various sources",
-		users: ["Chris"]
+		users: ["Chris", "Mary"]
 	}]
 }, {
 	title: "Done",
@@ -48,7 +49,7 @@ export const taskTracks = [{
 		Id: uuidv4(),
 		status: "done",
 		description: "Detailed brief for devs and designer",
-		users: ["Will"]
+		users: ["Edward"]
 	}]
 }
 

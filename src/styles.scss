@@ -11,3 +11,30 @@
 .cdk-drag-animating {
   transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+.badge {
+  padding: 0.4rem;
+}
+
+.badge-pill {
+  border-radius: 0.2rem;
+}
+
+.badge-grey {
+  color: #7b7b7b;
+  background-color: #e0e0e0;
+}
+
+.badge-light {
+  color: #7b7b7b;
+  background-color: #f4f4f4;
+}
+
+.badge-warning {
+  color: #d68a00;
+  background-color: #fce6be;
+}
+
+.border-radius-1 {
+  border-radius: 0.3rem;
+}
