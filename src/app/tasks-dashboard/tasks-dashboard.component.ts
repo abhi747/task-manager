@@ -6,6 +6,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TasksService } from './../shared/tasks.service';
 import { users } from './../mock-data/user-data';
 import { TaskTrack } from './models/taskTrack';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UtilService } from './../shared/util.service';
 
 
 @Component({
@@ -19,11 +21,13 @@ export class TasksDashboardComponent implements OnInit {
 	taskForm: FormGroup;
 	modalRef: NgbModalRef;
 	selectedFile: any;
+	imgageUrl
 
 	constructor(
 		private _fb: FormBuilder,
 		private _modalService: NgbModal,
-		private _tasksService: TasksService
+		private _tasksService: TasksService,
+		private _utilService: UtilService
 	) { }
 
 	ngOnInit(): void {
@@ -35,6 +39,7 @@ export class TasksDashboardComponent implements OnInit {
 			title: ['', Validators.required],
 			description: ['', Validators.required],
 			file: [],
+			date: [Date.now()],
 			users: [[], Validators.required],
 			status: ["todo"]
 		})
@@ -46,19 +51,18 @@ export class TasksDashboardComponent implements OnInit {
 	}
 
 	addTask(): void {
-		console.log(this.taskForm.value);
 		this.taskTracks = this._tasksService.addTask(
 			this.taskForm.value
 		);
 		this.modalRef.close();
 	}
 
-	readFileAsync(file): Promise<ArrayBuffer | string> {
+	readFileAsync(file): Promise<ArrayBuffer> {
 		return new Promise((resolve, reject) => {
 			let reader = new FileReader();
 
 			reader.onload = () => {
-				resolve(reader.result);
+				resolve(reader.result as ArrayBuffer);
 			};
 			reader.onerror = reject;
 
@@ -69,10 +73,13 @@ export class TasksDashboardComponent implements OnInit {
 	async onFileChange(event: Event): Promise<any> {
 		try {
 			const file = (<HTMLInputElement>event.target).files[0];
-			const contentBuffer = await this.readFileAsync(file);
-			console.log(contentBuffer)
+			const contentBuffer: ArrayBuffer = await this.readFileAsync(file);
+			const imageUrl = this._utilService.getStringFromArrayBuffer(contentBuffer);
+			this.taskForm.patchValue({
+				file: imageUrl
+			});
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
 	}
 

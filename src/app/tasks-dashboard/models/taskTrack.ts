@@ -1,14 +1,18 @@
+import { SafeUrl } from '@angular/platform-browser';
+
 export interface TaskTrack {
 	title: string;
 	Id: string;
 	status: string,
-	taskList: TaskList[];
+	taskList: Task[];
 }
 
-interface TaskList {
+interface Task {
 	title: string;
 	Id: string;
 	status: string,
+	file?: string | SafeUrl;
 	description: string;
+	date: number,
 	users: string[]
 }

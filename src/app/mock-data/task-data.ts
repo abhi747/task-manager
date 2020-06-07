@@ -1,6 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { TaskTrack } from './../tasks-dashboard/models/taskTrack';
 
+const startDate = new Date(2020, 0, 1);
+const endDate = new Date();
+
+const getRandomDate = (): number => {
+	const date = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
+	return date.getTime();
+}
+
 export const taskTracks: TaskTrack[] = [{
 	title: "To Do",
 	status: "todo",
@@ -10,6 +18,7 @@ export const taskTracks: TaskTrack[] = [{
 		Id: uuidv4(),
 		status: "todo",
 		description: "Create designs for responsive layouts",
+		date: getRandomDate(),
 		users: ["Mary"]
 	}]
 }, {
@@ -21,12 +30,14 @@ export const taskTracks: TaskTrack[] = [{
 		Id: uuidv4(),
 		status: "inprogress",
 		description: "Conduct new interview sessions",
+		date: getRandomDate(),
 		users: ["John"]
 	}, {
 		title: "Final editions",
 		Id: uuidv4(),
 		status: "inprogress",
 		description: "Final editions for the projects",
+		date: getRandomDate(),
 		users: ["Edward"]
 	}]
 }, {
@@ -38,6 +49,7 @@ export const taskTracks: TaskTrack[] = [{
 		Id: uuidv4(),
 		status: "review",
 		description: "UI kit creations from various sources",
+		date: getRandomDate(),
 		users: ["Chris", "Mary"]
 	}]
 }, {
@@ -49,8 +61,8 @@ export const taskTracks: TaskTrack[] = [{
 		Id: uuidv4(),
 		status: "done",
 		description: "Detailed brief for devs and designer",
+		date: getRandomDate(),
 		users: ["Edward"]
 	}]
 }
-
 ];

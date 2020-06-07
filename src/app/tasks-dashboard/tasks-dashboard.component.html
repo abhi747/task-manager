@@ -42,6 +42,9 @@
 					<input type="file" id="file" name="file" (change)="onFileChange($event)">
 				</div>
 			</div>
+			<div>
+				<img [src]="imgageUrl" alt="">
+			</div>
 			<div class="form-group">
 				<label for="users">Users</label>
 				<select multiple class="form-control" id="users" formControlName="users">
