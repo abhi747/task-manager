@@ -55,6 +55,7 @@ export class TasksDashboardComponent implements OnInit {
 
 	openAddTaskModal(content: TemplateRef<any>): void {
 		this.initTaskForm();
+		this.uploadedFileName = "";
 		this.modalRef = this._modalService.open(content, { centered: true, size: 'md' })
 	}
 
