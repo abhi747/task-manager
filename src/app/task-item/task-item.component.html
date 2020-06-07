@@ -1,8 +1,7 @@
-<div class="card mt-2 border-radius-1 position-relative" cdkDrag [ngClass]="{ 'mb-3': !last}">
+<div class="card mt-2 border-radius-1 position-relative" cdkDrag [ngClass]="{ 'mb-3': !last}" (click)="openTaskModal(content)">
 	<span class="text-secondary close-btn" (click)="removeTask(task)">&#10005;</span>
 	<div class="card-body">
 		<div class="font-weight-bold">{{task.title}}</div>
-		<div>{{task.description}}</div>
 		<div>
 			<span class="float-right">
 				<ng-container *ngFor="let user of task.users; let last=last;">
@@ -14,3 +13,22 @@
 		</div>
 	</div>
 </div>
+
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">{{task.title}}</h4>
+		<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div>{{task.description}}</div>
+		<span class="float-right">
+			<ng-container *ngFor="let user of task.users; let last=last;">
+				<span class="mr-2 badge badge-pill badge-light">
+					{{user}}
+				</span>
+			</ng-container>
+		</span>
+	</div>
+</ng-template>
