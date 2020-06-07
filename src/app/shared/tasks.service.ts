@@ -44,6 +44,7 @@ export class TasksService {
 	addTask(task: Task): TaskTrack[] {
 		this.taskTracks = this.getTracksData();
 		this.taskTracks[0].taskList.push({ ...task, Id: uuidv4() });
+		this.addTaskStorage(this.taskTracks);
 		return this.taskTracks;
 	}
 

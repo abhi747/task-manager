@@ -2,9 +2,9 @@
 	<app-tasks-metadata></app-tasks-metadata>
 
 	<div cdkDropListGroup class="row">
-		<div cdkDropList [cdkDropListData]="taskTrack.taskList" (cdkDropListDropped)="drop($event, taskTrack.status)" *ngFor="let taskTrack of taskTracks; trackBy: trackID" class="col-md-3">
+		<div cdkDropList [cdkDropListData]="taskTrack.taskList" (cdkDropListDropped)="drop($event, taskTrack.status)" *ngFor="let taskTrack of taskTracks; trackBy: trackID" class="col-lg-3 col-md-4 col-sm-6 droplist">
 			<div class="track border-radius-1">
-				<span class="font-weight-bold">{{taskTrack.title}}</span>
+				<span class="d-inline-block pb-2 font-weight-bold">{{taskTrack.title}}</span>
 				<span class="float-right text-secondary">
 					<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
 				</span>
@@ -17,7 +17,7 @@
 
 <ng-template #content let-modal>
 	<div class="modal-header">
-		<h4 class="modal-title" id="modal-basic-title">Add Task</h4>
+		<h4 class="modal-title" id="modal-basic-title">New Task</h4>
 		<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -25,34 +25,36 @@
 	<div class="modal-body">
 		<form [formGroup]="taskForm" (submit)="addTask()">
 			<div class="form-group">
-				<label for="title">Title</label>
+				<label for="title" class="required">Title</label>
 				<div class="input-group">
 					<input type="text" id="title" class="form-control" name="title" formControlName="title" autocomplete="off">
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="description">Description</label>
+				<label for="description" class="required">Description</label>
 				<div class="input-group">
 					<textarea class="form-control" id="description" rows="2" formControlName="description"></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="file">File</label>
-				<div class="input-group">
-					<input type="file" id="file" name="file" (change)="onFileChange($event)">
+				<ng-multiselect-dropdown [placeholder]="'Users'" [data]="users" formControlName="users" [settings]="dropdownSettings">
+				</ng-multiselect-dropdown>
+			</div>
+			<div class="form-group">
+				<label for="file">Image <span class="font-italic text-secondary">(optional)</span></label>
+				<div class="custom-file">
+					<input type="file" class="custom-file-input" id="customFile" (change)="onFileChange($event)">
+					<label class="custom-file-label" for="customFile">
+						<small *ngIf="uploadedFileName">{{uploadedFileName}}</small>
+						<span *ngIf="!uploadedFileName">Choose file</span>
+					</label>
+					<div *ngIf="taskForm.get('file').hasError('invalidFile')" class="text-danger">
+						<small>Oops! Please upload image file only</small>
+					</div>
 				</div>
 			</div>
 			<div>
-				<img [src]="imgageUrl" alt="">
-			</div>
-			<div class="form-group">
-				<label for="users">Users</label>
-				<select multiple class="form-control" id="users" formControlName="users">
-					<option *ngFor="let user of users" [value]="user">{{user}}</option>
-				</select>
-			</div>
-			<div>
-				<button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">Save</button>
+				<button type="submit" class="btn btn-primary float-right" [disabled]="taskForm.invalid">Save</button>
 			</div>
 		</form>
 	</div>

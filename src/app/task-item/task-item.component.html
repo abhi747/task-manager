@@ -1,15 +1,15 @@
-<div class="card mt-2 border-radius-1 position-relative" [ngClass]="{ 'mb-3': !last}" (click)="openTaskModal(content)">
+<div class="card border-radius-1 position-relative" [ngClass]="{ 'mb-3': !last}" (click)="openTaskModal(content)">
 	<span class="text-secondary close-btn" (click)="removeTask(task)">&#10005;</span>
 	<div class="card-body p-0">
 		<div class="font-weight-bold p-3">{{task.title}}</div>
-		<div *ngIf="task.file" class="pb-3">
-			<img [src]="task.file" alt="File" class="w-100">
+		<div *ngIf="fileUrl" class="pb-3">
+			<img [src]="fileUrl" alt="File" class="w-100">
 		</div>
 		<div class="px-3 pb-3 d-flex flex-wrap justify-content-between">
-			<span class="badge badge-pill badge-light">
+			<div class="mb-1 badge badge-pill badge-light">
 				<i class="fi-xnluxl-bell"></i> {{task.date | date: 'MMM, d'}}
-			</span>
-			<span>
+			</div>
+			<span class="ml-auto">
 				<span *ngFor="let user of task.users; let last=last;" class="ml-1 badge badge-pill badge-light">
 					{{user}}
 				</span>
@@ -26,7 +26,10 @@
 		</button>
 	</div>
 	<div class="modal-body">
-		<div>{{task.description}}</div>
+		<div class="pb-3">{{task.description}}</div>
+		<div *ngIf="fileUrl" class="pb-3">
+			<img [src]="fileUrl" alt="File" class="w-100">
+		</div>
 		<span class="float-right">
 			<ng-container *ngFor="let user of task.users; let last=last;">
 				<span class="mr-2 badge badge-pill badge-light">

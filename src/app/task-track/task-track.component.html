@@ -1,3 +1,3 @@
-<div *ngFor="let task of taskList; let last=last; trackBy: taskId" cdkDrag>
+<div *ngFor="let task of taskList; let last=last; trackBy: taskId" class="dragbox" cdkDrag>
 	<app-task-item [task]="task" [last]="last"></app-task-item>
 </div>

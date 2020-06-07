@@ -2,11 +2,11 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 import { TasksService } from './../shared/tasks.service';
 import { users } from './../mock-data/user-data';
 import { TaskTrack } from './models/taskTrack';
-import { DomSanitizer } from '@angular/platform-browser';
 import { UtilService } from './../shared/util.service';
 
 
@@ -20,8 +20,16 @@ export class TasksDashboardComponent implements OnInit {
 	users: string[] = users;
 	taskForm: FormGroup;
 	modalRef: NgbModalRef;
-	selectedFile: any;
-	imgageUrl
+	uploadedFileName: string;
+	selectedItems = [];
+	dropdownSettings: IDropdownSettings = {
+		singleSelection: false,
+		idField: 'item_id',
+		textField: 'item_text',
+		itemsShowLimit: 3,
+		allowSearchFilter: true
+	};
+
 
 	constructor(
 		private _fb: FormBuilder,
@@ -47,7 +55,7 @@ export class TasksDashboardComponent implements OnInit {
 
 	openAddTaskModal(content: TemplateRef<any>): void {
 		this.initTaskForm();
-		this.modalRef = this._modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
+		this.modalRef = this._modalService.open(content, { centered: true, size: 'md' })
 	}
 
 	addTask(): void {
@@ -71,15 +79,21 @@ export class TasksDashboardComponent implements OnInit {
 	}
 
 	async onFileChange(event: Event): Promise<any> {
-		try {
-			const file = (<HTMLInputElement>event.target).files[0];
-			const contentBuffer: ArrayBuffer = await this.readFileAsync(file);
-			const imageUrl = this._utilService.getStringFromArrayBuffer(contentBuffer);
-			this.taskForm.patchValue({
-				file: imageUrl
-			});
-		} catch (err) {
-			console.error(err);
+		const file = (<HTMLInputElement>event.target).files[0];
+		this.uploadedFileName = file.name;
+		this.taskForm.get('file').setErrors({ invalidFile: false });
+		if (this._utilService.validateFileType(this.uploadedFileName)) {
+			try {
+				const contentBuffer: ArrayBuffer = await this.readFileAsync(file);
+				const imageUrl = this._utilService.getStringFromArrayBuffer(contentBuffer);
+				this.taskForm.patchValue({
+					file: imageUrl
+				});
+			} catch (err) {
+				console.error(err);
+			}
+		} else {
+			this.taskForm.get('file').setErrors({ invalidFile: true });
 		}
 	}
 
@@ -96,8 +110,8 @@ export class TasksDashboardComponent implements OnInit {
 				event.container.data,
 				event.previousIndex,
 				event.currentIndex);
+			this._tasksService.updateTaskStatus(taskDropped.Id, trackStatus);
 		}
-		this._tasksService.updateTaskStatus(taskDropped.Id, trackStatus);
 		this._tasksService.addTaskStorage(this.taskTracks);
 	}
 

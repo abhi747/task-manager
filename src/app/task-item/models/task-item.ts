@@ -1,7 +1,11 @@
+import { SafeUrl } from '@angular/platform-browser';
+
 export interface Task {
-	title: string,
-	Id: string,
+	title: string;
+	Id: string;
 	status: string,
-	description: string,
+	file?: string | SafeUrl;
+	description: string;
+	date: number,
 	users: string[]
-};
+}

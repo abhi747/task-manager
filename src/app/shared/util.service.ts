@@ -6,6 +6,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class UtilService {
 
+	allowedFileTypes = ['jpg', 'jpeg', 'png'];
+
 	constructor(
 		private _domSanitizer: DomSanitizer,
 	) { }
@@ -16,6 +18,13 @@ export class UtilService {
 			return data + String.fromCharCode(byte);
 		}, '');
 		const base64String = btoa(STRING_CHAR);
-		return this._domSanitizer.bypassSecurityTrustUrl(`data:image/jpg;base64, ${base64String}`);
+		return `data:image/jpg;base64, ${base64String}`;
+	}
+
+	validateFileType(name: String): boolean {
+		const extension = name.substring(name.lastIndexOf('.') + 1);
+		return this.allowedFileTypes.some(fileType =>
+			extension === fileType
+		);
 	}
 }
